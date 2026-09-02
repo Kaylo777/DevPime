@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function CrudPage({ title, api, columns, formFields, renderForm }) {
+export default function CrudPage({ title, api, columns, formFields, renderForm, canEdit = true }) {
   const [items, setItems] = useState([]);
   const [editing, setEditing] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -36,12 +36,14 @@ export default function CrudPage({ title, api, columns, formFields, renderForm }
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h1>{title}</h1>
-        <button
-          onClick={() => { setEditing(null); setShowForm(true); }}
-          style={{ padding: '10px 20px', background: '#e94560', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
-        >
-          + Nuevo
-        </button>
+        {canEdit && (
+          <button
+            onClick={() => { setEditing(null); setShowForm(true); }}
+            style={{ padding: '10px 20px', background: '#e94560', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+          >
+            + Nuevo
+          </button>
+        )}
       </div>
 
       {showForm && (
@@ -62,12 +64,14 @@ export default function CrudPage({ title, api, columns, formFields, renderForm }
               {columns.map((col) => (
                 <th key={col.key} style={{ padding: '12px 15px', textAlign: 'left' }}>{col.label}</th>
               ))}
-              <th style={{ padding: '12px 15px', textAlign: 'left' }}>Acciones</th>
+              {canEdit && (
+                <th style={{ padding: '12px 15px', textAlign: 'left' }}>Acciones</th>
+              )}
             </tr>
           </thead>
           <tbody>
             {items.length === 0 && (
-              <tr><td colSpan={columns.length + 1} style={{ padding: '20px', textAlign: 'center', color: '#999' }}>No hay registros</td></tr>
+              <tr><td colSpan={columns.length + (canEdit ? 1 : 0)} style={{ padding: '20px', textAlign: 'center', color: '#999' }}>No hay registros</td></tr>
             )}
             {items.map((item) => (
               <tr key={item.id} style={{ borderBottom: '1px solid #eee' }}>
@@ -76,10 +80,12 @@ export default function CrudPage({ title, api, columns, formFields, renderForm }
                     {col.render ? col.render(item[col.key], item) : item[col.key]}
                   </td>
                 ))}
-                <td style={{ padding: '12px 15px' }}>
-                  <button onClick={() => handleEdit(item)} style={{ marginRight: '8px', padding: '5px 10px', background: '#0f3460', color: 'white', border: 'none', borderRadius: '3px', cursor: 'pointer' }}>Editar</button>
-                  <button onClick={() => handleDelete(item.id)} style={{ padding: '5px 10px', background: '#e94560', color: 'white', border: 'none', borderRadius: '3px', cursor: 'pointer' }}>Eliminar</button>
-                </td>
+                {canEdit && (
+                  <td style={{ padding: '12px 15px' }}>
+                    <button onClick={() => handleEdit(item)} style={{ marginRight: '8px', padding: '5px 10px', background: '#0f3460', color: 'white', border: 'none', borderRadius: '3px', cursor: 'pointer' }}>Editar</button>
+                    <button onClick={() => handleDelete(item.id)} style={{ padding: '5px 10px', background: '#e94560', color: 'white', border: 'none', borderRadius: '3px', cursor: 'pointer' }}>Eliminar</button>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

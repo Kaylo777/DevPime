@@ -48,4 +48,11 @@ export const dashboard = {
   get: () => api.get('/dashboard/'),
 };
 
+export const auth = {
+  register: (data) => api.post('/auth/register/', data),
+  login: (data) => api.post('/auth/login/', data),
+  logout: () => api.post('/auth/logout/'),
+  getUser: () => api.get('/auth/user/'),
+};
+
 export default api;

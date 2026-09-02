@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import CrudPage from './CrudPage';
 import { reuniones, clientes } from '../api';
+import { useAuth } from '../context/AuthContext';
 
 const columns = [
   { key: 'id_reunion', label: 'ID' },
@@ -71,5 +72,7 @@ function ReunionForm({ initialData, onSave, onCancel }) {
 }
 
 export default function Reuniones() {
-  return <CrudPage title="Reuniones" api={reuniones} columns={columns} renderForm={(props) => <ReunionForm {...props} />} />;
+  const { user } = useAuth();
+  const canEdit = user?.rol === 'ejecutivo';
+  return <CrudPage title="Reuniones" api={reuniones} columns={columns} renderForm={(props) => <ReunionForm {...props} />} canEdit={canEdit} />;
 }

@@ -79,5 +79,5 @@ function PropuestaForm({ initialData, onSave, onCancel }) {
 }
 
 export default function Propuestas() {
-  return <CrudPage title="Propuestas" api={propuestas} columns={columns} renderForm={(props) => <PropuestaForm {...props} />} />;
+  return <CrudPage title="Propuestas" api={propuestas} columns={columns} renderForm={(props) => <PropuestaForm {...props} />} canEdit />;
 }

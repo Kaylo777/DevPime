@@ -33,3 +33,6 @@ Thumbs.db
 # Virtual Environment
 venv/
 .venv/
+
+# Carpeta duplicada residuo
+DevPime/

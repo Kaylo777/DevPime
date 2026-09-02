@@ -110,5 +110,5 @@ function ProyectoForm({ initialData, onSave, onCancel }) {
 }
 
 export default function Proyectos() {
-  return <CrudPage title="Proyectos" api={proyectos} columns={columns} renderForm={(props) => <ProyectoForm {...props} />} />;
+  return <CrudPage title="Proyectos" api={proyectos} columns={columns} renderForm={(props) => <ProyectoForm {...props} />} canEdit />;
 }

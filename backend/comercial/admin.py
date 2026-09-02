@@ -1,5 +1,26 @@
 from django.contrib import admin
-from .models import Ejecutivo, Cliente, Reunion, Propuesta, Proyecto
+from django.contrib.auth.admin import UserAdmin
+from .models import CustomUser, Ejecutivo, Cliente, Reunion, Propuesta, Proyecto
+
+
+@admin.register(CustomUser)
+class CustomUserAdmin(UserAdmin):
+    list_display = ('email', 'first_name', 'last_name', 'rol', 'is_staff', 'is_active')
+    search_fields = ('email', 'first_name', 'last_name')
+    ordering = ('email',)
+    fieldsets = (
+        (None, {'fields': ('email', 'password')}),
+        ('Información personal', {'fields': ('first_name', 'last_name', 'rol')}),
+        ('Vinculaciones', {'fields': ('id_ejecutivo', 'id_cliente')}),
+        ('Permisos', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Fechas', {'fields': ('last_login', 'date_joined')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'first_name', 'last_name', 'rol', 'password1', 'password2'),
+        }),
+    )
 
 
 @admin.register(Ejecutivo)

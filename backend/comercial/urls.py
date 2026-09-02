@@ -8,6 +8,7 @@ from .views import (
     ProyectoViewSet,
     dashboard,
 )
+from .views_auth import RegisterView, LoginView, LogoutView, CurrentUserView
 
 router = DefaultRouter()
 router.register(r'ejecutivos', EjecutivoViewSet)
@@ -19,4 +20,8 @@ router.register(r'proyectos', ProyectoViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('dashboard/', dashboard, name='dashboard'),
+    path('auth/register/', RegisterView.as_view(), name='auth-register'),
+    path('auth/login/', LoginView.as_view(), name='auth-login'),
+    path('auth/logout/', LogoutView.as_view(), name='auth-logout'),
+    path('auth/user/', CurrentUserView.as_view(), name='auth-user'),
 ]

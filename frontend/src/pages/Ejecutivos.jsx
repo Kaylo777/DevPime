@@ -1,5 +1,6 @@
 import CrudPage from './CrudPage';
 import { ejecutivos } from '../api';
+import { useAuth } from '../context/AuthContext';
 
 const columns = [
   { key: 'id_ejecutivo', label: 'ID' },
@@ -20,5 +21,7 @@ const formFields = [
 ];
 
 export default function Ejecutivos() {
-  return <CrudPage title="Ejecutivos" api={ejecutivos} columns={columns} formFields={formFields} />;
+  const { user } = useAuth();
+  const canEdit = user?.rol === 'ejecutivo';
+  return <CrudPage title="Ejecutivos" api={ejecutivos} columns={columns} formFields={formFields} canEdit={canEdit} />;
 }

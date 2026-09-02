@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import CrudPage from './CrudPage';
 import { clientes, ejecutivos } from '../api';
+import { useAuth } from '../context/AuthContext';
 
 const columns = [
   { key: 'id_cliente', label: 'ID' },
@@ -80,5 +81,7 @@ function ClienteForm({ initialData, onSave, onCancel }) {
 }
 
 export default function Clientes() {
-  return <CrudPage title="Clientes" api={clientes} columns={columns} renderForm={(props) => <ClienteForm {...props} />} />;
+  const { user } = useAuth();
+  const canEdit = user?.rol === 'ejecutivo';
+  return <CrudPage title="Clientes" api={clientes} columns={columns} renderForm={(props) => <ClienteForm {...props} />} canEdit={canEdit} />;
 }
