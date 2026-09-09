@@ -11,18 +11,21 @@ from .serializers import (
     ProyectoSerializer,
 )
 from .permissions import EsEjecutivoOrReadOnly, AutenticadoPuedeEditar
+from .views_auth import CsrfExemptSessionAuthentication
 
 
 class EjecutivoViewSet(viewsets.ModelViewSet):
     queryset = Ejecutivo.objects.all()
     serializer_class = EjecutivoSerializer
     permission_classes = [EsEjecutivoOrReadOnly]
+    authentication_classes = [CsrfExemptSessionAuthentication]
 
 
 class ClienteViewSet(viewsets.ModelViewSet):
     queryset = Cliente.objects.select_related('id_ejecutivo').all()
     serializer_class = ClienteSerializer
     permission_classes = [EsEjecutivoOrReadOnly]
+    authentication_classes = [CsrfExemptSessionAuthentication]
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -36,6 +39,7 @@ class ReunionViewSet(viewsets.ModelViewSet):
     queryset = Reunion.objects.select_related('id_cliente').all()
     serializer_class = ReunionSerializer
     permission_classes = [EsEjecutivoOrReadOnly]
+    authentication_classes = [CsrfExemptSessionAuthentication]
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -49,6 +53,7 @@ class PropuestaViewSet(viewsets.ModelViewSet):
     queryset = Propuesta.objects.select_related('id_cliente').all()
     serializer_class = PropuestaSerializer
     permission_classes = [AutenticadoPuedeEditar]
+    authentication_classes = [CsrfExemptSessionAuthentication]
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -65,6 +70,7 @@ class ProyectoViewSet(viewsets.ModelViewSet):
     queryset = Proyecto.objects.select_related('id_cliente', 'id_propuesta').all()
     serializer_class = ProyectoSerializer
     permission_classes = [AutenticadoPuedeEditar]
+    authentication_classes = [CsrfExemptSessionAuthentication]
 
     def get_queryset(self):
         queryset = super().get_queryset()

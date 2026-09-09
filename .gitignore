@@ -34,5 +34,8 @@ Thumbs.db
 venv/
 .venv/
 
-# Carpeta duplicada residuo
-DevPime/
+# Carpeta duplicada residuo (solo a nivel raíz)
+/DevPime/
+
+# Datos personales (dump de migración)
+backend/datos_devpime.sql

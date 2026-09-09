@@ -23,5 +23,5 @@ const formFields = [
 export default function Ejecutivos() {
   const { user } = useAuth();
   const canEdit = user?.rol === 'ejecutivo';
-  return <CrudPage title="Ejecutivos" api={ejecutivos} columns={columns} formFields={formFields} canEdit={canEdit} />;
+  return <CrudPage title="Ejecutivos" api={ejecutivos} columns={columns} formFields={formFields} canEdit={canEdit} idKey="id_ejecutivo" />;
 }

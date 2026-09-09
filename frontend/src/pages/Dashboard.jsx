@@ -1,6 +1,14 @@
 import { useState, useEffect } from 'react';
 import { dashboard } from '../api';
 
+const colores = {
+  ejecutivos: '#e94560',
+  clientes: '#0f3460',
+  reuniones: '#16213e',
+  propuestas: '#533483',
+  proyectos: '#1a535c',
+};
+
 export default function Dashboard() {
   const [data, setData] = useState(null);
 
@@ -8,66 +16,84 @@ export default function Dashboard() {
     dashboard.get().then((res) => setData(res.data));
   }, []);
 
-  if (!data) return <p>Cargando...</p>;
+  if (!data) return <div className="text-center py-5">Cargando...</div>;
 
   const tarjetas = [
-    { label: 'Ejecutivos', value: data.total_ejecutivos, color: '#e94560' },
-    { label: 'Clientes', value: data.total_clientes, color: '#0f3460' },
-    { label: 'Reuniones', value: data.total_reuniones, color: '#16213e' },
-    { label: 'Propuestas', value: data.total_propuestas, color: '#533483' },
-    { label: 'Proyectos', value: data.total_proyectos, color: '#1a535c' },
+    { label: 'Ejecutivos', value: data.total_ejecutivos, color: colores.ejecutivos },
+    { label: 'Clientes', value: data.total_clientes, color: colores.clientes },
+    { label: 'Reuniones', value: data.total_reuniones, color: colores.reuniones },
+    { label: 'Propuestas', value: data.total_propuestas, color: colores.propuestas },
+    { label: 'Proyectos', value: data.total_proyectos, color: colores.proyectos },
   ];
 
   return (
     <div>
-      <h1 style={{ marginBottom: '30px' }}>Dashboard</h1>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '20px', marginBottom: '40px' }}>
+      <h1 className="h3 fw-bold mb-4">Dashboard</h1>
+
+      <div className="row g-3 mb-4">
         {tarjetas.map((t) => (
-          <div key={t.label} style={{
-            background: t.color,
-            color: 'white',
-            padding: '20px',
-            borderRadius: '10px',
-          }}>
-            <h3 style={{ margin: 0, fontSize: '14px', opacity: 0.8 }}>{t.label}</h3>
-            <p style={{ margin: '10px 0 0', fontSize: '32px', fontWeight: 'bold' }}>{t.value}</p>
+          <div className="col-6 col-md-4 col-xl" key={t.label}>
+            <div className="card border-0 text-white shadow-sm" style={{ background: t.color }}>
+              <div className="card-body">
+                <h3 className="fs-6 fw-normal opacity-75 mb-1">{t.label}</h3>
+                <p className="fw-bold mb-0" style={{ fontSize: '2rem' }}>{t.value}</p>
+              </div>
+            </div>
           </div>
         ))}
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-        <div style={{ background: 'white', padding: '20px', borderRadius: '10px' }}>
-          <h3>Propuestas por Estado</h3>
-          {data.propuestas_por_estado.length === 0 && <p>No hay propuestas</p>}
-          {data.propuestas_por_estado.map((p) => (
-            <div key={p.estado} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #eee' }}>
-              <span>{p.estado}</span>
-              <strong>{p.total}</strong>
+
+      <div className="row g-3 mb-4">
+        <div className="col-md-6">
+          <div className="card border-0 shadow-sm h-100">
+            <div className="card-body">
+              <h3 className="h6 fw-bold">Propuestas por Estado</h3>
+              {data.propuestas_por_estado.length === 0 && <p className="text-secondary mb-0">No hay propuestas</p>}
+              {data.propuestas_por_estado.map((p) => (
+                <div key={p.estado} className="d-flex justify-content-between align-items-center py-2 border-bottom">
+                  <span>{p.estado}</span>
+                  <span className="badge rounded-pill text-bg-light">{p.total}</span>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
-        <div style={{ background: 'white', padding: '20px', borderRadius: '10px' }}>
-          <h3>Proyectos por Estado</h3>
-          {data.proyectos_por_estado.length === 0 && <p>No hay proyectos</p>}
-          {data.proyectos_por_estado.map((p) => (
-            <div key={p.estado} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #eee' }}>
-              <span>{p.estado}</span>
-              <strong>{p.total}</strong>
+        <div className="col-md-6">
+          <div className="card border-0 shadow-sm h-100">
+            <div className="card-body">
+              <h3 className="h6 fw-bold">Proyectos por Estado</h3>
+              {data.proyectos_por_estado.length === 0 && <p className="text-secondary mb-0">No hay proyectos</p>}
+              {data.proyectos_por_estado.map((p) => (
+                <div key={p.estado} className="d-flex justify-content-between align-items-center py-2 border-bottom">
+                  <span>{p.estado}</span>
+                  <span className="badge rounded-pill text-bg-light">{p.total}</span>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </div>
-      <div style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-        <div style={{ background: 'white', padding: '20px', borderRadius: '10px' }}>
-          <h3>Monto Total Propuestas</h3>
-          <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#533483' }}>
-            ${Number(data.monto_total_propuestas).toLocaleString('es-CO')}
-          </p>
+
+      <div className="row g-3">
+        <div className="col-md-6">
+          <div className="card border-0 shadow-sm">
+            <div className="card-body">
+              <h3 className="h6 fw-bold text-secondary">Monto Total Propuestas</h3>
+              <p className="fw-bold mb-0" style={{ fontSize: '1.5rem', color: colores.propuestas }}>
+                ${Number(data.monto_total_propuestas).toLocaleString('es-CO')}
+              </p>
+            </div>
+          </div>
         </div>
-        <div style={{ background: 'white', padding: '20px', borderRadius: '10px' }}>
-          <h3>Presupuesto Total Proyectos</h3>
-          <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#1a535c' }}>
-            ${Number(data.monto_total_proyectos).toLocaleString('es-CO')}
-          </p>
+        <div className="col-md-6">
+          <div className="card border-0 shadow-sm">
+            <div className="card-body">
+              <h3 className="h6 fw-bold text-secondary">Presupuesto Total Proyectos</h3>
+              <p className="fw-bold mb-0" style={{ fontSize: '1.5rem', color: colores.proyectos }}>
+                ${Number(data.monto_total_proyectos).toLocaleString('es-CO')}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

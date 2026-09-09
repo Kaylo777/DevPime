@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function CrudPage({ title, api, columns, formFields, renderForm, canEdit = true }) {
+export default function CrudPage({ title, api, columns, formFields, renderForm, canEdit = true, idKey = 'id' }) {
   const [items, setItems] = useState([]);
   const [editing, setEditing] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -11,7 +11,7 @@ export default function CrudPage({ title, api, columns, formFields, renderForm, 
 
   const handleSave = async (data) => {
     if (editing) {
-      await api.update(editing.id, data);
+      await api.update(editing[idKey], data);
     } else {
       await api.create(data);
     }
@@ -33,63 +33,72 @@ export default function CrudPage({ title, api, columns, formFields, renderForm, 
   };
 
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h1>{title}</h1>
-        {canEdit && (
-          <button
-            onClick={() => { setEditing(null); setShowForm(true); }}
-            style={{ padding: '10px 20px', background: '#e94560', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
-          >
-            + Nuevo
-          </button>
-        )}
-      </div>
-
-      {showForm && (
-        <div style={{ background: 'white', padding: '20px', borderRadius: '10px', marginBottom: '20px' }}>
-          <h3>{editing ? 'Editar' : 'Crear'} {title}</h3>
-          {renderForm ? (
-            renderForm({ initialData: editing, onSave: handleSave, onCancel: () => { setShowForm(false); setEditing(null); } })
-          ) : (
-            <GenericForm fields={formFields} initialData={editing} onSave={handleSave} onCancel={() => { setShowForm(false); setEditing(null); }} />
+    <div className="card border-0 shadow-sm">
+      <div className="card-body p-4">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h1 className="h4 mb-0 fw-bold">{title}</h1>
+          {canEdit && (
+            <button
+              onClick={() => { setEditing(null); setShowForm(true); }}
+              className="btn text-white fw-semibold"
+              style={{ background: '#e94560' }}
+            >
+              + Nuevo
+            </button>
           )}
         </div>
-      )}
 
-      <div style={{ background: 'white', borderRadius: '10px', overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ background: '#1a1a2e', color: 'white' }}>
-              {columns.map((col) => (
-                <th key={col.key} style={{ padding: '12px 15px', textAlign: 'left' }}>{col.label}</th>
-              ))}
-              {canEdit && (
-                <th style={{ padding: '12px 15px', textAlign: 'left' }}>Acciones</th>
+        {showForm && (
+          <div className="card mb-4 border-0 shadow-sm" style={{ background: '#f8f9fa' }}>
+            <div className="card-body">
+              <h3 className="h5 fw-bold mb-3">{editing ? 'Editar' : 'Crear'} {title}</h3>
+              {renderForm ? (
+                renderForm({ initialData: editing, onSave: handleSave, onCancel: () => { setShowForm(false); setEditing(null); } })
+              ) : (
+                <GenericForm fields={formFields} initialData={editing} onSave={handleSave} onCancel={() => { setShowForm(false); setEditing(null); }} />
               )}
-            </tr>
-          </thead>
-          <tbody>
-            {items.length === 0 && (
-              <tr><td colSpan={columns.length + (canEdit ? 1 : 0)} style={{ padding: '20px', textAlign: 'center', color: '#999' }}>No hay registros</td></tr>
-            )}
-            {items.map((item) => (
-              <tr key={item.id} style={{ borderBottom: '1px solid #eee' }}>
+            </div>
+          </div>
+        )}
+
+        <div className="table-responsive">
+          <table className="table table-hover table-striped align-middle mb-0">
+            <thead className="table-dark">
+              <tr>
                 {columns.map((col) => (
-                  <td key={col.key} style={{ padding: '12px 15px' }}>
-                    {col.render ? col.render(item[col.key], item) : item[col.key]}
-                  </td>
+                  <th key={col.key} scope="col">{col.label}</th>
                 ))}
                 {canEdit && (
-                  <td style={{ padding: '12px 15px' }}>
-                    <button onClick={() => handleEdit(item)} style={{ marginRight: '8px', padding: '5px 10px', background: '#0f3460', color: 'white', border: 'none', borderRadius: '3px', cursor: 'pointer' }}>Editar</button>
-                    <button onClick={() => handleDelete(item.id)} style={{ padding: '5px 10px', background: '#e94560', color: 'white', border: 'none', borderRadius: '3px', cursor: 'pointer' }}>Eliminar</button>
-                  </td>
+                  <th scope="col" style={{ width: '150px' }}>Acciones</th>
                 )}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {items.length === 0 && (
+                <tr>
+                  <td colSpan={columns.length + (canEdit ? 1 : 0)} className="text-center text-secondary py-4">
+                    No hay registros
+                  </td>
+                </tr>
+              )}
+              {items.map((item) => (
+                <tr key={item[idKey]}>
+                  {columns.map((col) => (
+                    <td key={col.key}>
+                      {col.render ? col.render(item[col.key], item) : item[col.key]}
+                    </td>
+                  ))}
+                  {canEdit && (
+                    <td>
+                      <button onClick={() => handleEdit(item)} className="btn btn-sm text-white me-1" style={{ background: '#0f3460' }}>Editar</button>
+                      <button onClick={() => handleDelete(item[idKey])} className="btn btn-sm btn-danger">Eliminar</button>
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
@@ -115,40 +124,42 @@ function GenericForm({ fields, initialData, onSave, onCancel }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-      {fields.map((field) => (
-        <div key={field.key}>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>{field.label}</label>
-          {field.type === 'select' ? (
-            <select
-              value={formData[field.key] || ''}
-              onChange={(e) => setFormData({ ...formData, [field.key]: e.target.value })}
-              style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '5px' }}
-            >
-              <option value="">Seleccionar...</option>
-              {field.options.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
-              ))}
-            </select>
-          ) : field.type === 'textarea' ? (
-            <textarea
-              value={formData[field.key] || ''}
-              onChange={(e) => setFormData({ ...formData, [field.key]: e.target.value })}
-              style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '5px', minHeight: '80px' }}
-            />
-          ) : (
-            <input
-              type={field.type || 'text'}
-              value={formData[field.key] || ''}
-              onChange={(e) => setFormData({ ...formData, [field.key]: e.target.value })}
-              style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '5px' }}
-            />
-          )}
+    <form onSubmit={handleSubmit}>
+      <div className="row g-3">
+        {fields.map((field) => (
+          <div className="col-md-6" key={field.key}>
+            <label className="form-label fw-semibold">{field.label}</label>
+            {field.type === 'select' ? (
+              <select
+                className="form-select"
+                value={formData[field.key] || ''}
+                onChange={(e) => setFormData({ ...formData, [field.key]: e.target.value })}
+              >
+                <option value="">Seleccionar...</option>
+                {field.options.map((opt) => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+            ) : field.type === 'textarea' ? (
+              <textarea
+                className="form-control"
+                value={formData[field.key] || ''}
+                onChange={(e) => setFormData({ ...formData, [field.key]: e.target.value })}
+              />
+            ) : (
+              <input
+                type={field.type || 'text'}
+                className="form-control"
+                value={formData[field.key] || ''}
+                onChange={(e) => setFormData({ ...formData, [field.key]: e.target.value })}
+              />
+            )}
+          </div>
+        ))}
+        <div className="col-12 d-flex gap-2 mt-4">
+          <button type="submit" className="btn px-4 text-white fw-semibold" style={{ background: '#1a535c' }}>Guardar</button>
+          <button type="button" onClick={onCancel} className="btn btn-secondary px-4">Cancelar</button>
         </div>
-      ))}
-      <div style={{ gridColumn: 'span 2', display: 'flex', gap: '10px' }}>
-        <button type="submit" style={{ padding: '10px 20px', background: '#1a535c', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Guardar</button>
-        <button type="button" onClick={onCancel} style={{ padding: '10px 20px', background: '#999', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Cancelar</button>
       </div>
     </form>
   );

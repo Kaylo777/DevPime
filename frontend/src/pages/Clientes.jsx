@@ -38,43 +38,43 @@ function ClienteForm({ initialData, onSave, onCancel }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-      <div>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Nombre</label>
-        <input value={formData.nombre} onChange={(e) => setFormData({ ...formData, nombre: e.target.value })} style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '5px' }} required />
+    <form onSubmit={handleSubmit} className="row g-3">
+      <div className="col-md-6">
+        <label className="form-label fw-semibold">Nombre</label>
+        <input value={formData.nombre} onChange={(e) => setFormData({ ...formData, nombre: e.target.value })} className="form-control" required />
       </div>
-      <div>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Apellido</label>
-        <input value={formData.apellido} onChange={(e) => setFormData({ ...formData, apellido: e.target.value })} style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '5px' }} required />
+      <div className="col-md-6">
+        <label className="form-label fw-semibold">Apellido</label>
+        <input value={formData.apellido} onChange={(e) => setFormData({ ...formData, apellido: e.target.value })} className="form-control" required />
       </div>
-      <div>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Email</label>
-        <input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '5px' }} required />
+      <div className="col-md-6">
+        <label className="form-label fw-semibold">Email</label>
+        <input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="form-control" required />
       </div>
-      <div>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Telefono</label>
-        <input value={formData.telefono} onChange={(e) => setFormData({ ...formData, telefono: e.target.value })} style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '5px' }} />
+      <div className="col-md-6">
+        <label className="form-label fw-semibold">Telefono</label>
+        <input value={formData.telefono} onChange={(e) => setFormData({ ...formData, telefono: e.target.value })} className="form-control" />
       </div>
-      <div>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Empresa</label>
-        <input value={formData.empresa} onChange={(e) => setFormData({ ...formData, empresa: e.target.value })} style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '5px' }} />
+      <div className="col-md-6">
+        <label className="form-label fw-semibold">Empresa</label>
+        <input value={formData.empresa} onChange={(e) => setFormData({ ...formData, empresa: e.target.value })} className="form-control" />
       </div>
-      <div>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Ejecutivo</label>
-        <select value={formData.id_ejecutivo} onChange={(e) => setFormData({ ...formData, id_ejecutivo: e.target.value })} style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '5px' }} required>
+      <div className="col-md-6">
+        <label className="form-label fw-semibold">Ejecutivo</label>
+        <select value={formData.id_ejecutivo} onChange={(e) => setFormData({ ...formData, id_ejecutivo: e.target.value })} className="form-select" required>
           <option value="">Seleccionar...</option>
           {ejecutivosList.map((e) => (
             <option key={e.id_ejecutivo} value={e.id_ejecutivo}>{e.nombre} {e.apellido}</option>
           ))}
         </select>
       </div>
-      <div style={{ gridColumn: 'span 2' }}>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Direccion</label>
-        <textarea value={formData.direccion} onChange={(e) => setFormData({ ...formData, direccion: e.target.value })} style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '5px', minHeight: '60px' }} />
+      <div className="col-12">
+        <label className="form-label fw-semibold">Direccion</label>
+        <textarea value={formData.direccion} onChange={(e) => setFormData({ ...formData, direccion: e.target.value })} className="form-control" style={{ minHeight: '60px' }} />
       </div>
-      <div style={{ gridColumn: 'span 2', display: 'flex', gap: '10px' }}>
-        <button type="submit" style={{ padding: '10px 20px', background: '#1a535c', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Guardar</button>
-        <button type="button" onClick={onCancel} style={{ padding: '10px 20px', background: '#999', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Cancelar</button>
+      <div className="col-12 d-flex gap-2">
+        <button type="submit" className="btn px-4 text-white fw-semibold" style={{ background: '#1a535c' }}>Guardar</button>
+        <button type="button" onClick={onCancel} className="btn btn-secondary px-4">Cancelar</button>
       </div>
     </form>
   );
@@ -83,5 +83,5 @@ function ClienteForm({ initialData, onSave, onCancel }) {
 export default function Clientes() {
   const { user } = useAuth();
   const canEdit = user?.rol === 'ejecutivo';
-  return <CrudPage title="Clientes" api={clientes} columns={columns} renderForm={(props) => <ClienteForm {...props} />} canEdit={canEdit} />;
+  return <CrudPage title="Clientes" api={clientes} columns={columns} renderForm={(props) => <ClienteForm {...props} />} canEdit={canEdit} idKey="id_cliente" />;
 }

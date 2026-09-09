@@ -52,32 +52,32 @@ function ProyectoForm({ initialData, onSave, onCancel }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-      <div style={{ gridColumn: 'span 2' }}>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Nombre del Proyecto</label>
-        <input value={formData.nombre} onChange={(e) => setFormData({ ...formData, nombre: e.target.value })} style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '5px' }} required />
+    <form onSubmit={handleSubmit} className="row g-3">
+      <div className="col-12">
+        <label className="form-label fw-semibold">Nombre del Proyecto</label>
+        <input value={formData.nombre} onChange={(e) => setFormData({ ...formData, nombre: e.target.value })} className="form-control" required />
       </div>
-      <div>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Cliente</label>
-        <select value={formData.id_cliente} onChange={(e) => setFormData({ ...formData, id_cliente: e.target.value })} style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '5px' }} required>
+      <div className="col-md-6">
+        <label className="form-label fw-semibold">Cliente</label>
+        <select value={formData.id_cliente} onChange={(e) => setFormData({ ...formData, id_cliente: e.target.value })} className="form-select" required>
           <option value="">Seleccionar...</option>
           {clientesList.map((c) => (
             <option key={c.id_cliente} value={c.id_cliente}>{c.nombre} {c.apellido}</option>
           ))}
         </select>
       </div>
-      <div>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Propuesta (opcional)</label>
-        <select value={formData.id_propuesta} onChange={(e) => setFormData({ ...formData, id_propuesta: e.target.value })} style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '5px' }}>
+      <div className="col-md-6">
+        <label className="form-label fw-semibold">Propuesta (opcional)</label>
+        <select value={formData.id_propuesta} onChange={(e) => setFormData({ ...formData, id_propuesta: e.target.value })} className="form-select">
           <option value="">Ninguna</option>
           {propuestasList.map((p) => (
             <option key={p.id_propuesta} value={p.id_propuesta}>{p.titulo}</option>
           ))}
         </select>
       </div>
-      <div>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Estado</label>
-        <select value={formData.estado} onChange={(e) => setFormData({ ...formData, estado: e.target.value })} style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '5px' }}>
+      <div className="col-md-6">
+        <label className="form-label fw-semibold">Estado</label>
+        <select value={formData.estado} className="form-select" onChange={(e) => setFormData({ ...formData, estado: e.target.value })}>
           <option value="planificacion">Planificacion</option>
           <option value="en_curso">En Curso</option>
           <option value="pausado">Pausado</option>
@@ -85,30 +85,30 @@ function ProyectoForm({ initialData, onSave, onCancel }) {
           <option value="cancelado">Cancelado</option>
         </select>
       </div>
-      <div>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Presupuesto ($)</label>
-        <input type="number" step="0.01" value={formData.presupuesto} onChange={(e) => setFormData({ ...formData, presupuesto: e.target.value })} style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '5px' }} />
+      <div className="col-md-6">
+        <label className="form-label fw-semibold">Presupuesto ($)</label>
+        <input type="number" step="0.01" className="form-control" value={formData.presupuesto} onChange={(e) => setFormData({ ...formData, presupuesto: e.target.value })} />
       </div>
-      <div>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Fecha Inicio</label>
-        <input type="date" value={formData.fecha_inicio} onChange={(e) => setFormData({ ...formData, fecha_inicio: e.target.value })} style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '5px' }} />
+      <div className="col-md-6">
+        <label className="form-label fw-semibold">Fecha Inicio</label>
+        <input type="date" className="form-control" value={formData.fecha_inicio} onChange={(e) => setFormData({ ...formData, fecha_inicio: e.target.value })} />
       </div>
-      <div>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Fecha Fin</label>
-        <input type="date" value={formData.fecha_fin} onChange={(e) => setFormData({ ...formData, fecha_fin: e.target.value })} style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '5px' }} />
+      <div className="col-md-6">
+        <label className="form-label fw-semibold">Fecha Fin</label>
+        <input type="date" className="form-control" value={formData.fecha_fin} onChange={(e) => setFormData({ ...formData, fecha_fin: e.target.value })} />
       </div>
-      <div style={{ gridColumn: 'span 2' }}>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Descripcion</label>
-        <textarea value={formData.descripcion} onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })} style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '5px', minHeight: '60px' }} />
+      <div className="col-12">
+        <label className="form-label fw-semibold">Descripcion</label>
+        <textarea value={formData.descripcion} onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })} className="form-control" style={{ minHeight: '60px' }} />
       </div>
-      <div style={{ gridColumn: 'span 2', display: 'flex', gap: '10px' }}>
-        <button type="submit" style={{ padding: '10px 20px', background: '#1a535c', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Guardar</button>
-        <button type="button" onClick={onCancel} style={{ padding: '10px 20px', background: '#999', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Cancelar</button>
+      <div className="col-12 d-flex gap-2">
+        <button type="submit" className="btn px-4 text-white fw-semibold" style={{ background: '#1a535c' }}>Guardar</button>
+        <button type="button" onClick={onCancel} className="btn btn-secondary px-4">Cancelar</button>
       </div>
     </form>
   );
 }
 
 export default function Proyectos() {
-  return <CrudPage title="Proyectos" api={proyectos} columns={columns} renderForm={(props) => <ProyectoForm {...props} />} canEdit />;
+  return <CrudPage title="Proyectos" api={proyectos} columns={columns} renderForm={(props) => <ProyectoForm {...props} />} canEdit idKey="id_proyecto" />;
 }

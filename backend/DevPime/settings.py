@@ -5,7 +5,12 @@ Django settings for DevPime project.
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Carga las variables del archivo .env (para conectar con Supabase o base local)
+load_dotenv(BASE_DIR / '.env')
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-e3um07_mmgy7b0st7gpog#gl@mr!@i^!rcqk6xwp6q8joqr^79')
 
@@ -55,6 +60,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'DevPime.wsgi.application'
 
+# Configura la base de datos PostgreSQL.
+# Para usar Supabase (en la nube) crea un archivo .env en esta carpeta con
+# DB_NAME, DB_USER, DB_PASSWORD, DB_HOST y DB_PORT de tu proyecto de Supabase.
+# (Settings > Database > Connection string). Sin .env se usa la base local.
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -63,6 +72,11 @@ DATABASES = {
         'PASSWORD': os.environ.get('DB_PASSWORD', 'damian2021'),
         'HOST': os.environ.get('DB_HOST', 'localhost'),
         'PORT': os.environ.get('DB_PORT', '5432'),
+        # Supabase exige conexiones cifradas (SSL).
+        'OPTIONS': {
+            'sslmode': os.environ.get('DB_SSLMODE', 'disable'),
+            'options': '-c search_path=public',
+        },
     }
 }
 

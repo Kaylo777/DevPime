@@ -40,180 +40,92 @@ export default function Register() {
     }
   };
 
-  const inputStyle = {
-    width: '100%',
-    padding: '12px',
-    marginBottom: '14px',
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    fontSize: '15px',
-    boxSizing: 'border-box',
-  };
-
-  const labelStyle = {
-    display: 'block',
-    marginBottom: '6px',
-    fontWeight: 600,
-    fontSize: '14px',
-    color: '#333',
-  };
-
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
-      padding: '20px',
-    }}>
-      <div style={{
-        background: '#fff',
-        padding: '40px',
-        borderRadius: '16px',
-        boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
-        width: '100%',
-        maxWidth: '440px',
-      }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '8px', color: '#1a1a2e' }}>
-          Crear cuenta
-        </h2>
-        <p style={{ textAlign: 'center', color: '#888', marginBottom: '28px' }}>
-          Regístrate para comenzar
-        </p>
+    <div className="min-vh-100 d-flex align-items-center justify-content-center" style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)', padding: '20px' }}>
+      <div className="card border-0 shadow-lg rounded-4" style={{ width: '100%', maxWidth: '480px' }}>
+        <div className="card-body p-4 p-md-5">
+          <h2 className="text-center mb-1 fw-bold text-dark">Crear cuenta</h2>
+          <p className="text-center text-secondary mb-4">Regístrate para comenzar</p>
 
-        {error && (
-          <div style={{
-            background: '#fdecea',
-            color: '#c0392b',
-            padding: '12px',
-            borderRadius: '8px',
-            marginBottom: '16px',
-            fontSize: '14px',
-          }}>
-            {error}
-          </div>
-        )}
+          {error && (
+            <div className="alert alert-danger py-2" role="alert">{error}</div>
+          )}
 
-        <form onSubmit={handleSubmit}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-            <div>
-              <label style={labelStyle}>Nombre</label>
-              <input
-                name="nombre"
-                value={form.nombre}
-                onChange={handleChange}
-                placeholder="Nombre"
-                style={inputStyle}
-                required
-              />
+          <form onSubmit={handleSubmit}>
+            <div className="row">
+              <div className="col-md-6 mb-3">
+                <label className="form-label fw-semibold">Nombre</label>
+                <input name="nombre" className="form-control" value={form.nombre} onChange={handleChange} placeholder="Nombre" required />
+              </div>
+              <div className="col-md-6 mb-3">
+                <label className="form-label fw-semibold">Apellido</label>
+                <input name="apellido" className="form-control" value={form.apellido} onChange={handleChange} placeholder="Apellido" required />
+              </div>
             </div>
-            <div>
-              <label style={labelStyle}>Apellido</label>
-              <input
-                name="apellido"
-                value={form.apellido}
-                onChange={handleChange}
-                placeholder="Apellido"
-                style={inputStyle}
-                required
-              />
+
+            <div className="mb-3">
+              <label className="form-label fw-semibold">Email</label>
+              <input type="email" name="email" className="form-control" value={form.email} onChange={handleChange} placeholder="tucorreo@ejemplo.com" required />
             </div>
-          </div>
 
-          <label style={labelStyle}>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            placeholder="tucorreo@ejemplo.com"
-            style={inputStyle}
-            required
-          />
+            <div className="mb-3">
+              <label className="form-label fw-semibold">Rol</label>
+              <div className="d-flex gap-2">
+                {[
+                  { value: 'cliente', label: 'Cliente' },
+                  { value: 'ejecutivo', label: 'Ejecutivo' },
+                ].map((r) => (
+                  <label
+                    key={r.value}
+                    className="flex-fill d-flex align-items-center justify-content-center rounded-3 fw-semibold py-2"
+                    style={{
+                      border: `2px solid ${form.rol === r.value ? '#e94560' : '#ddd'}`,
+                      color: form.rol === r.value ? '#e94560' : '#888',
+                      background: form.rol === r.value ? '#fdecef' : '#fff',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <input
+                      type="radio"
+                      name="rol"
+                      value={r.value}
+                      checked={form.rol === r.value}
+                      onChange={handleChange}
+                      className="me-1"
+                    />
+                    {r.label}
+                  </label>
+                ))}
+              </div>
+            </div>
 
-          <label style={labelStyle}>Rol</label>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '14px' }}>
-            {[
-              { value: 'cliente', label: 'Cliente' },
-              { value: 'ejecutivo', label: 'Ejecutivo' },
-            ].map((r) => (
-              <label
-                key={r.value}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '12px',
-                  border: `2px solid ${form.rol === r.value ? '#e94560' : '#ddd'}`,
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  fontWeight: 600,
-                  color: form.rol === r.value ? '#e94560' : '#888',
-                  background: form.rol === r.value ? '#fdecef' : '#fff',
-                }}
-              >
-                <input
-                  type="radio"
-                  name="rol"
-                  value={r.value}
-                  checked={form.rol === r.value}
-                  onChange={handleChange}
-                  style={{ marginRight: '6px' }}
-                />
-                {r.label}
-              </label>
-            ))}
-          </div>
+            <div className="mb-3">
+              <label className="form-label fw-semibold">Contraseña</label>
+              <input type="password" name="password" className="form-control" value={form.password} onChange={handleChange} placeholder="••••••••" required />
+            </div>
 
-          <label style={labelStyle}>Contraseña</label>
-          <input
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            placeholder="••••••••"
-            style={inputStyle}
-            required
-          />
+            <div className="mb-4">
+              <label className="form-label fw-semibold">Confirmar contraseña</label>
+              <input type="password" name="password2" className="form-control" value={form.password2} onChange={handleChange} placeholder="••••••••" required />
+            </div>
 
-          <label style={labelStyle}>Confirmar contraseña</label>
-          <input
-            type="password"
-            name="password2"
-            value={form.password2}
-            onChange={handleChange}
-            placeholder="••••••••"
-            style={{ ...inputStyle, marginBottom: '22px' }}
-            required
-          />
+            <button
+              type="submit"
+              className="btn btn-lg w-100 text-white fw-bold"
+              style={{ background: '#e94560' }}
+              disabled={loading}
+            >
+              {loading ? 'Registrando...' : 'Registrarse'}
+            </button>
+          </form>
 
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              width: '100%',
-              padding: '14px',
-              background: '#e94560',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '8px',
-              fontSize: '16px',
-              fontWeight: 700,
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.6 : 1,
-            }}
-          >
-            {loading ? 'Registrando...' : 'Registrarse'}
-          </button>
-        </form>
-
-        <p style={{ textAlign: 'center', marginTop: '20px', color: '#888', fontSize: '14px' }}>
-          ¿Ya tenés cuenta?{' '}
-          <Link to="/login" style={{ color: '#e94560', fontWeight: 600, textDecoration: 'none' }}>
-            Iniciar sesión
-          </Link>
-        </p>
+          <p className="text-center mt-4 text-secondary">
+            ¿Ya tenés cuenta?{' '}
+            <Link to="/login" className="fw-semibold text-decoration-none" style={{ color: '#e94560' }}>
+              Iniciar sesión
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
