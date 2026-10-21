@@ -107,32 +107,40 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'comercial.CustomUser'
 
-# CORS: permite credenciales (cookies de sesión) desde el frontend.
-# Con ALLOW_ALL + CREDENTIALS, django-cors-headers refleja el Origin en vez de '*' (compatible con cookies).
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS: orígenes explícitos permitidos para enviar cookies y credenciales
 CORS_ALLOW_CREDENTIALS = True
 
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://127.0.0.1:5173',
+    'https://dev-pime.vercel.app',  # URL de tu frontend en Vercel
+]
+
+# Agregar orígenes extra definidos en variables de entorno (si los hay)
+CORS_EXTRA = [
+    o.strip() for o in os.environ.get('CORS_ALLOWED_ORIGINS', '').split(',') if o.strip()
+]
+CORS_ALLOWED_ORIGINS.extend(CORS_EXTRA)
+
+# CSRF: dominios de confianza
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:5173',
     'http://localhost:5174',
-    'http://localhost:5175',
     'http://127.0.0.1:5173',
-    'http://127.0.0.1:5174',
-    'http://127.0.0.1:5175',
-]
-# Orígenes extra (p. ej. el frontend en producción), separados por coma:
-#   CSRF_TRUSTED_ORIGINS=https://devpime.onrender.com,https://tu-frontend.vercel.app
-CSRF_TRUSTED_ORIGINS += [
-    origin.strip()
-    for origin in os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',')
-    if origin.strip()
+    'https://dev-pime.vercel.app',    # URL del frontend en Vercel
+    'https://devpime.onrender.com',    # URL del backend en Render
 ]
 
-# Cookies de sesión/CSRF. En producción el frontend y el backend viven en dominios
-# distintos, así que la cookie debe ser SameSite=None + Secure para viajar entre sitios.
-# En desarrollo (DEBUG) se usan valores permisivos para poder trabajar sobre http://localhost.
+CSRF_EXTRA = [
+    o.strip() for o in os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',') if o.strip()
+]
+CSRF_TRUSTED_ORIGINS.extend(CSRF_EXTRA)
+
+# Cookies de sesión y CSRF para autenticación entre dominios distintos (Vercel <-> Render)
 SESSION_COOKIE_SAMESITE = 'Lax' if DEBUG else 'None'
 SESSION_COOKIE_SECURE = not DEBUG
+
 CSRF_COOKIE_SAMESITE = 'Lax' if DEBUG else 'None'
 CSRF_COOKIE_SECURE = not DEBUG
 

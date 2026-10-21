@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL || ''}/api`,
+  baseURL: 'https://devpime.onrender.com/api',
+  withCredentials: true // <--- Crucial para peticiones entre Vercel y Render
 });
 
 export const ejecutivos = {
