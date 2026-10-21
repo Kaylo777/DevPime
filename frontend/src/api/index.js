@@ -1,16 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-<<<<<<< HEAD
   baseURL: `${import.meta.env.VITE_API_URL || ''}/api`,
-=======
-
-  baseURL: `${import.meta.env.VITE_API_URL || ''}/api`,
-
-  baseURL: '/api',
-  withCredentials: true,
-
->>>>>>> 19df0e5d8d7acdd7018e85ca2f2b1f4404e9e2c6
 });
 
 export const ejecutivos = {
