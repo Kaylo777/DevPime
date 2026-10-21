@@ -21,9 +21,16 @@ export default function Register() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    // Validación básica de contraseñas coincidentes antes de enviar
+    if (form.password !== form.password2) {
+      setError('Las contraseñas no coinciden.');
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await auth.register(form);
@@ -31,9 +38,23 @@ export default function Register() {
       navigate('/app');
     } catch (err) {
       const data = err.response?.data;
-      const msg = data
-        ? Object.values(data).flat().join(' ')
-        : 'Error al registrarse. Intente nuevamente.';
+      let msg = 'Error al registrarse. Intente nuevamente.';
+
+      if (data) {
+        if (typeof data === 'string') {
+          msg = data;
+        } else if (data.detail) {
+          msg = data.detail;
+        } else if (typeof data === 'object') {
+          // Extrae texto legible evitando convertirlos a [object Object]
+          msg = Object.entries(data)
+            .map(([key, val]) => `${key}: ${Array.isArray(val) ? val.join(', ') : val}`)
+            .join(' | ');
+        }
+      } else if (err.message) {
+        msg = err.message;
+      }
+
       setError(msg);
     } finally {
       setLoading(false);
