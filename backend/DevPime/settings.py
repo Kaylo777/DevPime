@@ -119,6 +119,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:5173',
     'http://127.0.0.1:5174',
     'http://127.0.0.1:5175',
+    'https://dev-pime.vercel.app',
 ]
 # Orígenes extra (p. ej. el frontend en producción), separados por coma:
 #   CSRF_TRUSTED_ORIGINS=https://devpime.onrender.com,https://tu-frontend.vercel.app
